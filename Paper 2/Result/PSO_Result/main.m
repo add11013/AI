@@ -1,9 +1,9 @@
 clear
 clc
  
-Target=2;
+Target=1;
 NumberOfTest=10;
-Alpha=0.5;
+Alpha=0.07;
 LoadName='PSOResult_Ex2_trial';
 LoadName1='1PSOResult_Ex2_trial';
 
