@@ -1,10 +1,10 @@
 % This is for running paper experimentations
-for trial=1:1
+for trial=2:10
     
     trial
-    ExperimentationName='E3';
-    NumberOfTrainPoint=433;
-    ParameterOfPreSC=0.15;
-    ParameterOfConsSC=0.07;
+    ExperimentationName='E6';
+    NumberOfTrainPoint=115;
+    ParameterOfPreSC=0.3;
+    ParameterOfConsSC=0.3;
     MODEL_PSO(trial, ExperimentationName, NumberOfTrainPoint, ParameterOfPreSC, ParameterOfConsSC);
 end

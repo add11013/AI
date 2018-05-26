@@ -44,6 +44,7 @@ end
 %          IIM(i).value=CaculateIIM(llMData(i).value(1:NumberOfTrainPoint,:));
 %          i
 %      end
+%         save(['IIM_' ExperimentationName]);
         load(['IIM_' ExperimentationName]);
     
 %% caculate selection gain

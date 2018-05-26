@@ -4,7 +4,7 @@ tic
 
 %use function "dataSplit" to split data
 OriginalData=DataSplit(ExperimentationName);
-NumberOfTestPoint=size(OriginalData,1)-NumberOfTrainPoint;
+
 %use function "FeatureSelection(OriginalData)" to do the multi-target feature
 %selection
 [FeatureIndex, DataMatrix]=FeatureSelection(OriginalData, NumberOfTrainPoint, ExperimentationName);
@@ -27,7 +27,7 @@ NumberOfINPUT=length(h);
 NumberOfOUTPUT=NumberOfTarget/2;
 
 %k is the first column of target in DataMatrix 
-k=3*NumberOfTarget+1;
+k=30*NumberOfTarget+1;
 for N=1:NumberOfOUTPUT
     realPartOfTrain=DataMatrix(1:NumberOfTrainPoint,k);
     imagPartOfTrain=DataMatrix(1:NumberOfTrainPoint,k+1);
@@ -476,21 +476,21 @@ end
         xlabel('Trading date index');
         ylabel('Stock price (DJIA)');
         
-        figure(3)
-        output=OriginalData(31:length(OriginalData)-1,3)+real(FinalyHead(:,2));
-        plot(x,output);
-        line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,3))*0.8 max(OriginalData(:,3))*1.3]);
-        legend('Target (NASDAQ)','Forecast (NASDAQ)');
-        xlabel('Trading date index');
-        ylabel('Stock price (NASDAQ)');
-        
-        figure(4)
-        output=OriginalData(31:length(OriginalData)-1,4)+imag(FinalyHead(:,2));
-        plot(x,output);
-        line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,4))*0.8 max(OriginalData(:,4))*1.3]);
-        legend('Target (S&P500)','Forecast (S&P500)');
-        xlabel('Trading date index');
-        ylabel('Stock price (S&P500)');
+%         figure(3)
+%         output=OriginalData(31:length(OriginalData)-1,3)+real(FinalyHead(:,2));
+%         plot(x,output);
+%         line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,3))*0.8 max(OriginalData(:,3))*1.3]);
+%         legend('Target (NASDAQ)','Forecast (NASDAQ)');
+%         xlabel('Trading date index');
+%         ylabel('Stock price (NASDAQ)');
+%         
+%         figure(4)
+%         output=OriginalData(31:length(OriginalData)-1,4)+imag(FinalyHead(:,2));
+%         plot(x,output);
+%         line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,4))*0.8 max(OriginalData(:,4))*1.3]);
+%         legend('Target (S&P500)','Forecast (S&P500)');
+%         xlabel('Trading date index');
+%         ylabel('Stock price (S&P500)');
         
 %         figure(5)
 %         output=OriginalData(31:283,5)+imag(FinalyHead(:,3));
@@ -506,25 +506,17 @@ end
 %         xlabel('Trading date index');
 %         ylabel('Stock price (DJIA)');
 %         
-%         RMSETAIEX1=sqrt(sum(real(PSOgBest.Error(:,1)).^2)/(NumberOfTrainPoint));
-%         RMSEDJIA1=sqrt(sum(imag(PSOgBest.Error(:,1)).^2)/(NumberOfTrainPoint));
-%         RMSETAIEX2=sqrt(sum(real(testError(:,1)).^2)/(NumberOfTestPoint));
-%         RMSEDJIA2=sqrt(sum(imag(testError(:,1)).^2)/(NumberOfTestPoint));
+        RMSEtarget1_train=sqrt(sum(real(PSOgBest.Error(:,1)).^2)/(NumberOfTrainPoint));
+        RMSEtarget2_train=sqrt(sum(imag(PSOgBest.Error(:,1)).^2)/(NumberOfTrainPoint));
+        RMSEtarget1_test=sqrt(sum(real(testError(:,1)).^2)/(NumberOfTestPoint));
+        RMSEtarget2_test=sqrt(sum(imag(testError(:,1)).^2)/(NumberOfTestPoint));
 %         
 %         RMSENASDAQ1=sqrt(sum(real(PSOgBest.Error(:,2)).^2)/(NumberOfTrainPoint));
 %         RMSESP1=sqrt(sum(imag(PSOgBest.Error(:,2)).^2)/(NumberOfTrainPoint));
 %         RMSENASDAQ2=sqrt(sum(real(testError(:,2)).^2)/(NumberOfTestPoint));
 %         RMSESP2=sqrt(sum(imag(testError(:,2)).^2)/(NumberOfTestPoint));
 % 
-MAPEIBM1=sum(abs(real(PSOgBest.Error(:,1))))/(NumberOfTrainPoint);
-MAPEIBM2=sum(abs(real(testError(:,1))))/(NumberOfTestPoint);
-MAPEAPPLE1=sum(abs(imag(PSOgBest.Error(:,1))))/(NumberOfTrainPoint);
-MAPEAPPLE2=sum(abs(imag(testError(:,1))))/(NumberOfTestPoint);
 
-MAPEDELL1=sum(abs(real(PSOgBest.Error(:,2))))/(NumberOfTrainPoint);
-MAPEDELL2=sum(abs(real(testError(:,2))))/(NumberOfTestPoint);
-MAPEMicroSoft1=sum(abs(imag(PSOgBest.Error(:,2))))/(NumberOfTrainPoint);
-MAPEMicroSoft2=sum(abs(imag(testError(:,2))))/(NumberOfTestPoint);
         
 %         RMSE2003_1=sqrt(sum(real(PSOgBest.Error(:,3)).^2)/(NumberOfTrainPoint));
 %         RMSE2004_1=sqrt(sum(imag(PSOgBest.Error(:,3)).^2)/(NumberOfTrainPoint));

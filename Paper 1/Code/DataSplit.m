@@ -7,5 +7,12 @@ function output=DataSplit(ExperimentationName)
         A=data(:,i);
         B(:,i)=A(~isnan(A));
     end
-    output=B;
+    %target 6
+    if strcmp(ExperimentationName,'E6')
+        for i=1:size(data,2)
+            output(:,i)=log(B(2:length(B),i)./B(1:length(B)-1,i));
+        end
+    else
+        output=B;
+    end
 end
