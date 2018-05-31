@@ -444,84 +444,42 @@ end
  
 %% plot all result              
         %30天漲跌，預測目標是第31天~最後一天的漲跌，也就是最後要判斷第32天~最後一天的實際數值(不是漲跌)
-        x=linspace(1,length(OriginalData)-31,length(OriginalData)-31);
-
-        %畫出每個目標
-        for i=1:NumberOfTarget
-            figure(i)
-            hold on
-            plot(x,OriginalData(32:length(OriginalData),i));
-        end
-        
-        x=linspace(1,NumberOfAllPoint,NumberOfAllPoint);
-        %目標為第31天的漲跌，所以 第31天價格+第31天漲跌(預測出的)=第32天價格(預測出的)
-        for N=1:NumberOfOUTPUT
-            FinalyHead(:,N)=[PSOgBest.yHead(:,N) ;testyHead(:,N)];
-        end
-        k=1;
-
-        figure(1)
-        output=OriginalData(31:length(OriginalData)-1,1)+real(FinalyHead(:,1));
-        plot(x,output);
-        line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,1))*0.6 max(OriginalData(:,1))*1.3]);
-        legend('Target (TAIEX)','Forecast (TAIEX)');
-        xlabel('Trading date index');
-        ylabel('Stock price (TAIEX)');
-        
-        figure(2)
-        output=OriginalData(31:length(OriginalData)-1,2)+imag(FinalyHead(:,1));
-        plot(x,output);
-        line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,2))*0.8 max(OriginalData(:,2))*1.3]);
-        legend('Target (DJIA)','Forecast (DJIA)');
-        xlabel('Trading date index');
-        ylabel('Stock price (DJIA)');
-        
-%         figure(3)
-%         output=OriginalData(31:length(OriginalData)-1,3)+real(FinalyHead(:,2));
-%         plot(x,output);
-%         line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,3))*0.8 max(OriginalData(:,3))*1.3]);
-%         legend('Target (NASDAQ)','Forecast (NASDAQ)');
-%         xlabel('Trading date index');
-%         ylabel('Stock price (NASDAQ)');
+%         x=linspace(1,length(OriginalData)-31,length(OriginalData)-31);
+% 
+%         %畫出每個目標
+%         for i=1:NumberOfTarget
+%             figure(i)
+%             hold on
+%             plot(x,OriginalData(32:length(OriginalData),i));
+%         end
 %         
-%         figure(4)
-%         output=OriginalData(31:length(OriginalData)-1,4)+imag(FinalyHead(:,2));
+%         x=linspace(1,NumberOfAllPoint,NumberOfAllPoint);
+%         %目標為第31天的漲跌，所以 第31天價格+第31天漲跌(預測出的)=第32天價格(預測出的)
+%         for N=1:NumberOfOUTPUT
+%             FinalyHead(:,N)=[PSOgBest.yHead(:,N) ;testyHead(:,N)];
+%         end
+% 
+%         figure(1)
+%         output=OriginalData(31:length(OriginalData)-1,1)+real(FinalyHead(:,1));
 %         plot(x,output);
-%         line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,4))*0.8 max(OriginalData(:,4))*1.3]);
-%         legend('Target (S&P500)','Forecast (S&P500)');
+%         line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,1))*0.6 max(OriginalData(:,1))*1.3]);
+%         legend('Target (TAIEX)','Forecast (TAIEX)');
 %         xlabel('Trading date index');
-%         ylabel('Stock price (S&P500)');
-        
-%         figure(5)
-%         output=OriginalData(31:283,5)+imag(FinalyHead(:,3));
+%         ylabel('Stock price (TAIEX)');
+%         
+%         figure(2)
+%         output=OriginalData(31:length(OriginalData)-1,2)+imag(FinalyHead(:,1));
 %         plot(x,output);
+%         line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,2))*0.8 max(OriginalData(:,2))*1.3]);
 %         legend('Target (DJIA)','Forecast (DJIA)');
 %         xlabel('Trading date index');
 %         ylabel('Stock price (DJIA)');
-%         
-%         figure(6)
-%         output=OriginalData(31:283,6)+imag(FinalyHead(:,3));
-%         plot(x,output);
-%         legend('Target (DJIA)','Forecast (DJIA)');
-%         xlabel('Trading date index');
-%         ylabel('Stock price (DJIA)');
-%         
+        
         RMSEtarget1_train=sqrt(sum(real(PSOgBest.Error(:,1)).^2)/(NumberOfTrainPoint));
         RMSEtarget2_train=sqrt(sum(imag(PSOgBest.Error(:,1)).^2)/(NumberOfTrainPoint));
         RMSEtarget1_test=sqrt(sum(real(testError(:,1)).^2)/(NumberOfTestPoint));
         RMSEtarget2_test=sqrt(sum(imag(testError(:,1)).^2)/(NumberOfTestPoint));
-%         
-%         RMSENASDAQ1=sqrt(sum(real(PSOgBest.Error(:,2)).^2)/(NumberOfTrainPoint));
-%         RMSESP1=sqrt(sum(imag(PSOgBest.Error(:,2)).^2)/(NumberOfTrainPoint));
-%         RMSENASDAQ2=sqrt(sum(real(testError(:,2)).^2)/(NumberOfTestPoint));
-%         RMSESP2=sqrt(sum(imag(testError(:,2)).^2)/(NumberOfTestPoint));
-% 
 
-        
-%         RMSE2003_1=sqrt(sum(real(PSOgBest.Error(:,3)).^2)/(NumberOfTrainPoint));
-%         RMSE2004_1=sqrt(sum(imag(PSOgBest.Error(:,3)).^2)/(NumberOfTrainPoint));
-%         RMSE2003_2=sqrt(sum(real(testError(:,3)).^2)/(NumberOfTestPoint));
-%         RMSE2004_2=sqrt(sum(imag(testError(:,3)).^2)/(NumberOfTestPoint));
     time=toc;
     trial=['Result_' ExperimentationName '_trial' int2str(trial)];
     save(trial);
