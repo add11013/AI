@@ -5,5 +5,5 @@ Reference =>是所有參考文獻的pdf
 IEEE format.doc =>IEEE論文格式
 Neural Network figure.pptx =>類神經網路圖
 Neural Network figure.docx =>類神經網路中文說明
-Paper 2(English).docx =>英文論文
-Paper 2(Chinese).docx =>中文論文
+Paper 1(English).docx =>英文論文
+Paper 1(Chinese).docx =>中文論文
