@@ -3,7 +3,28 @@ clc
 OpenOriginalData=[];
 OriginalData=[];
 
+
 %% ----------------EX1----------------------
+data=xlsread('..\Data\EX1_TAIEX.csv');
+temp=data(~isnan(data(:,1)),1);
+OpenOriginalData=[OpenOriginalData temp];
+temp2=data(~isnan(data(:,4)),4);
+OriginalData=[OriginalData temp2];
+
+%% ----------------EX2----------------------
+data=xlsread('..\Data\EX2_TAIEX.csv');
+temp=data(~isnan(data(:,1)),1);
+OpenOriginalData=[OpenOriginalData temp];
+temp2=data(~isnan(data(:,4)),4);
+OriginalData=[OriginalData temp2];
+
+data=xlsread('..\Data\EX2_HSI.csv');
+temp=data(~isnan(data(:,1)),1);
+OpenOriginalData=[OpenOriginalData temp];
+temp2=data(~isnan(data(:,4)),4);
+OriginalData=[OriginalData temp2];
+
+%% ----------------EX3----------------------
 
 % data=xlsread('..\Data\EX1_TAIEX.csv');
 % temp=data(~isnan(data(:,1)),1);
@@ -29,33 +50,7 @@ OriginalData=[];
 % temp2=data(~isnan(data(:,4)),4);
 % OriginalData=[OriginalData temp2];
 
-
-%% ----------------EX2----------------------
-data=xlsread('..\Data\EX2_TAIEX.csv');
-temp=data(~isnan(data(:,1)),1);
-OpenOriginalData=[OpenOriginalData temp];
-temp2=data(~isnan(data(:,4)),4);
-OriginalData=[OriginalData temp2];
-
-data=xlsread('..\Data\EX2_HSI.csv');
-temp=data(~isnan(data(:,1)),1);
-OpenOriginalData=[OpenOriginalData temp];
-temp2=data(~isnan(data(:,4)),4);
-OriginalData=[OriginalData temp2];
-
-% data=xlsread('..\Data\EX2_^N225.csv');
-% temp=data(~isnan(data(:,1)),1);
-% OpenOriginalData=[OpenOriginalData temp];
-% temp2=data(~isnan(data(:,4)),4);
-% OriginalData=[OriginalData temp2];
-% 
-% data=xlsread('..\Data\EX2_000001.SS.csv');
-% temp=data(~isnan(data(:,1)),1);
-% OpenOriginalData=[OpenOriginalData temp];
-% temp2=data(~isnan(data(:,4)),4);
-% OriginalData=[OriginalData temp2];
-
-%% ----------------EX3----------------------
+%% ----------------EX5----------------------
 % data=xlsread('..\Data\EX3_APPLE.csv');
 % temp=data(~isnan(data(:,1)),1);
 % OpenOriginalData=[OpenOriginalData temp];

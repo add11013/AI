@@ -1,8 +1,8 @@
 function time=MODEL_PSO(trial, ExperimentationName, NumberOfTrainPoint, ParameterOfPreSC)
 close all;
 tic
-load(['Data_' ExperimentationName]);
 
+OriginalData=DataSplit(ExperimentationName);
 %use function "FeatureSelection(OriginalData)" to do the multi-target feature
 %selection
 [FeatureIndex, DataMatrix]=FeatureSelection(OriginalData, NumberOfTrainPoint, ExperimentationName);
@@ -30,11 +30,23 @@ NumberOfOUTPUT=NumberOfTarget/2;
 
 %k is the first column of target in DataMatrix 
 k=30*NumberOfTarget+1;
-for N=1:NumberOfOUTPUT
-    realPartOfTrain=DataMatrix(1:NumberOfTrainPoint,k);
-    imagPartOfTrain=DataMatrix(1:NumberOfTrainPoint,k+1);
-    k=k+2;
-    y(N).value=realPartOfTrain+imagPartOfTrain*j;
+if NumberOfTarget==1
+    y(1).valu=DataMatrix(1:NumberOfTrainPoint,k);
+elseif mod(NumberOfTarget,2)==0
+    for N=1:NumberOfOUTPUT
+        realPartOfTrain=DataMatrix(1:NumberOfTrainPoint,k);
+        imagPartOfTrain=DataMatrix(1:NumberOfTrainPoint,k+1);
+        k=k+2;
+        y(N).value=realPartOfTrain+imagPartOfTrain*j;
+    end
+else
+    for N=1:NumberOfOUTPUT
+        realPartOfTrain=DataMatrix(1:NumberOfTrainPoint,k);
+        imagPartOfTrain=DataMatrix(1:NumberOfTrainPoint,k+1);
+        k=k+2;
+        y(N).value=realPartOfTrain+imagPartOfTrain*j;
+    end
+    y(N+1).value=DataMatrix(1:NumberOfTrainPoint,k);
 end
         
 %% formation matrix
@@ -233,10 +245,9 @@ for ite=1:PSO.iterations
                     for M=1:NumberOfINPUT
                         r=gaussmf(h(M).value,termSet.INPUT(M).fuzzyset(FormationMatrix(rule,M)).value,1);
                         theta1Ofh=gaussmf(h(M).value,termSet.INPUT(M).fuzzyset(FormationMatrix(rule,M)).value,3)*Lambda1Set.INPUT(M).fuzzyset(FormationMatrix(rule,M)); %dr/dx
-                        theta2Ofh=gaussmf(h(M).value,termSet.INPUT(M).fuzzyset(FormationMatrix(rule,M)).value,6)*Lambda2Set.INPUT(M).fuzzyset(FormationMatrix(rule,M)); %d2r/dx^2
-                        temp=r.*exp(j.*(theta1Ofh+theta2Ofh));
+                        temp=r.*exp(j.*(theta1Ofh));
                         membership1=membership1.*temp;
-                        temp2=r.*cos(theta2Ofh).*cos(theta1Ofh)+r.*cos(theta2Ofh).*sin(theta1Ofh).*j;
+                        temp2=real(temp);
                         membership2=membership2.*temp2;
 %                         temp3=r*cos(theta2Ofh)*sin(theta1Ofh)+r*sin(theta2Ofh)*j;
 %                         membership3=membership3*temp3;
@@ -252,8 +263,16 @@ for ite=1:PSO.iterations
                 NBeta(N).value(1:length(FormationMatrix),1:NumberOfTrainPoint)=0;
                 for jj=1:NumberOfTrainPoint
                     for rule=1:length(FormationMatrix)
-                        temp1=real(Beta(N).value(rule,jj))/sum(real(Beta(N).value(:,jj)));
-                        temp2=imag(Beta(N).value(rule,jj))/sum(imag(Beta(N).value(:,jj)));
+                        SumReal=sum(real(Beta(N).value(:,jj)));
+                        SumImag=sum(imag(Beta(N).value(:,jj)));
+                        if SumReal==0
+                            SumReal=1e-99;
+                        end
+                        if SumImag==0
+                            SumImag=1e-99;
+                        end
+                        temp1=real(Beta(N).value(rule,jj))/SumReal;
+                        temp2=imag(Beta(N).value(rule,jj))/SumImag;
                         NBeta(N).value(rule,jj)=temp1+temp2*j;
                     end
                 end

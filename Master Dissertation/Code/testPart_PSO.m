@@ -11,11 +11,23 @@
         
         %get test target
         k=30*NumberOfTarget+1;
-        for N=1:NumberOfOUTPUT
-            realPartOfTest=DataMatrix(NumberOfTrainPoint+1:NumberOfAllPoint,k);
-            imagPartOfTest=DataMatrix(NumberOfTrainPoint+1:NumberOfAllPoint,k+1);
-            k=k+2;
-            testy(N).value=realPartOfTest+imagPartOfTest*j;
+        if NumberOfTarget==1
+            testy(1).value=DataMatrix(NumberOfTrainPoint+1:NumberOfAllPoint,k);
+        elseif mod(NumberOfTarget,2)==0
+            for N=1:NumberOfOUTPUT
+                realPartOfTest=DataMatrix(NumberOfTrainPoint+1:NumberOfAllPoint,k);
+                imagPartOfTest=DataMatrix(NumberOfTrainPoint+1:NumberOfAllPoint,k+1);
+                k=k+2;
+                testy(N).value=realPartOfTest+imagPartOfTest*j;
+            end
+        else
+            for N=1:NumberOfOUTPUT
+                realPartOfTest=DataMatrix(NumberOfTrainPoint+1:NumberOfAllPoint,k);
+                imagPartOfTest=DataMatrix(NumberOfTrainPoint+1:NumberOfAllPoint,k+1);
+                k=k+2;
+                testy(N).value=realPartOfTest+imagPartOfTest*j;
+            end
+            testy(N+1).value=DataMatrix(NumberOfTrainPoint+1:NumberOfAllPoint,k);
         end
             
           %將粒子的位置，儲存成termSet，以便後續建造前艦部的fuzzy set
