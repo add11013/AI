@@ -32,7 +32,7 @@ NumberOfOUTPUT=NumberOfTarget;
 k=30*NumberOfTarget+1;
 if NumberOfTarget==1
     y(1).value=DataMatrix(1:NumberOfTrainPoint,k);
-elseif NumberOfTarget/2==0
+elseif mod(NumberOfTarget,2)==0
     for N=1:NumberOfOUTPUT
         realPartOfTrain=DataMatrix(1:NumberOfTrainPoint,k);
         imagPartOfTrain=DataMatrix(1:NumberOfTrainPoint,k+1);
@@ -46,7 +46,7 @@ else
         k=k+2;
         y(N).value=realPartOfTrain+imagPartOfTrain*j;
     end
-    y(N+1).value=DataMatrix(1:NumberOfTrainPoint,k)
+    y(N+1).value=DataMatrix(1:NumberOfTrainPoint,k);
 end
         
 %% formation matrix
@@ -181,7 +181,7 @@ NumberOfPremise=length(FormationMatrix);
 NumberOfPremiseParameters=0;
 for M=1:NumberOfINPUT
     %乘以4是因為有center、std、lambda1、lambda2
-    NumberOfPremiseParameters=NumberOfPremiseParameters+length(h(M).center)*4;
+    NumberOfPremiseParameters=NumberOfPremiseParameters+length(h(M).center)*3;
 end
 toc
 %% PSO parameters
@@ -191,7 +191,7 @@ toc
   PSO.s1=rand(1);
   PSO.s2=rand(1);
   PSO.swarm_size=50;
-  PSO.iterations=10;
+  PSO.iterations=100;
   %initialize the particles
   for i=1:PSO.swarm_size
     j1=1;
@@ -201,8 +201,7 @@ toc
             particle(i).Position(j1)=h(M).center(ii)^2*randn; %center
             particle(i).Position(j1+1)=h(M).std^2*randn; %std
             particle(i).Position(j1+2)=randn*10; %lambda1
-            particle(i).Position(j1+3)=randn*10; %lambda2
-            j1=j1+4;
+            j1=j1+3;
         end
     end
     particle(i).Velocity(1:NumberOfPremiseParameters)=0;
@@ -229,8 +228,7 @@ for ite=1:PSO.iterations
                 for number=1:length(h(M).center)
                     termSet.INPUT(M).fuzzyset(number).value=[particle(i).Position(j1) particle(i).Position(j1+1)];
                     Lambda1Set.INPUT(M).fuzzyset(number)=particle(i).Position(j1+2);
-                    Lambda2Set.INPUT(M).fuzzyset(number)=particle(i).Position(j1+3);
-                    j1=j1+4;
+                    j1=j1+3;
                 end
             end
 
@@ -247,13 +245,13 @@ for ite=1:PSO.iterations
                         theta1Ofh=gaussmf(h(M).value,termSet.INPUT(M).fuzzyset(FormationMatrix(rule,M)).value,3)*Lambda1Set.INPUT(M).fuzzyset(FormationMatrix(rule,M)); %dr/dx
                         temp=r.*exp(j.*(theta1Ofh));
                         membership1=membership1.*temp;
-                        temp2=real(temp);
-                        membership2=membership2.*temp2;
+%                         temp2=real(temp);
+%                         membership2=membership2.*temp2;
 %                         temp3=r*cos(theta2Ofh)*sin(theta1Ofh)+r*sin(theta2Ofh)*j;
 %                         membership3=membership3*temp3;
                     end
                     Beta(1).value(rule,:)=membership1;
-                    Beta(2).value(rule,:)=membership2;
+%                     Beta(2).value(rule,:)=membership2;
 %                     Beta(3).value(rule,jj)=membership3;
                 end
 
@@ -311,8 +309,8 @@ for ite=1:PSO.iterations
             I=1e-9*eye(NumberOfOUTPUT);
             if(k==1)
                 particle(i).RLSE.P=P0-(P0*b(k).value)/(I+transpose(b(k).value)*P0*b(k).value)*transpose(b(k).value)*P0;
-                particle(i).RLSE.theta=theta0+particle(i).RLSE.P*b(k).value*(y(1).value(k)-transpose(b(k).value)*theta0);
-            else         
+                particle(i).RLSE.theta=theta0+particle(i).RLSE.P*b(k).value*(y(N).value(k)-transpose(b(k).value)*theta0);
+            else
                 particle(i).RLSE.P=particle(i).RLSE.P-(particle(i).RLSE.P*b(k).value)/(I+transpose(b(k).value)*particle(i).RLSE.P*b(k).value)*transpose(b(k).value)*particle(i).RLSE.P;
                 particle(i).RLSE.theta=particle(i).RLSE.theta+particle(i).RLSE.P*b(k).value*(y(N).value(k)-transpose(b(k).value)*particle(i).RLSE.theta);
             end
@@ -398,44 +396,6 @@ end
         xlabel('Trading date index');
         ylabel('Stock price (APPLE)');
         
-%         figure(2)
-%         output=OriginalData(31:length(OriginalData)-1,2)+imag(FinalyHead(:,1));
-%         plot(x,output);
-%         line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,2))*0.8 max(OriginalData(:,2))*1.3]);
-%         legend('Target (IBM)','Forecast (IBM)');
-%         xlabel('Trading date index');
-%         ylabel('Stock price (IBM)');
-        
-%         figure(3)
-%         output=OriginalData(31:length(OriginalData)-1,3)+real(FinalyHead(:,2));
-%         plot(x,output);
-%         line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,3))*0.8 max(OriginalData(:,3))*1.3]);
-%         legend('Target (S&P500)','Forecast (S&P500)');
-%         xlabel('Trading date index');
-%         ylabel('Stock price (S&P500)');
-%         
-%         figure(4)
-%         output=OriginalData(31:length(OriginalData)-1,4)+imag(FinalyHead(:,2));
-%         plot(x,output);
-%         line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,4))*0.8 max(OriginalData(:,4))*1.3]);
-%         legend('Target (RUSSELL 2000)','Forecast (RUSSELL 2000)');
-%         xlabel('Trading date index');
-%         ylabel('Stock price (RUSSELL 2000)');
-        
-%         figure(5)
-%         output=OriginalData(31:283,5)+imag(FinalyHead(:,3));
-%         plot(x,output);
-%         legend('Target (DJIA)','Forecast (DJIA)');
-%         xlabel('Trading date index');
-%         ylabel('Stock price (DJIA)');
-%         
-%         figure(6)
-%         output=OriginalData(31:283,6)+imag(FinalyHead(:,3));
-%         plot(x,output);
-%         legend('Target (DJIA)','Forecast (DJIA)');
-%         xlabel('Trading date index');
-%         ylabel('Stock price (DJIA)');
-%         
         
         TrainRMSE1=sqrt(sum(real(PSOgBest.Error(:,1)).^2)/(NumberOfTrainPoint));
         TrainRMSE2=sqrt(sum(imag(PSOgBest.Error(:,1)).^2)/(NumberOfTrainPoint));
@@ -447,10 +407,10 @@ end
 %         TestRMSE3=sqrt(sum(real(testError(:,2)).^2)/(NumberOfTestPoint));
 %         TestRMSE4=sqrt(sum(imag(testError(:,2)).^2)/(NumberOfTestPoint));
 
-TrainMAPE1=100/NumberOfTrainPoint*sum(abs(real(PSOgBest.Error(:,1)))./real(y(1).value(1:NumberOfTrainPoint)));
-TestMAPE1=100/NumberOfTestPoint*sum(abs(real(testError(:,1)))./real(y(1).value(1:NumberOfTestPoint)));
-TrainMAPE2=100/NumberOfTrainPoint*sum(abs(imag(PSOgBest.Error(:,1)))./(imag(y(1).value(1:NumberOfTrainPoint))));
-TestMAPE2=100/NumberOfTestPoint*sum(abs(imag(testError(:,1)))./imag(y(1).value(1:NumberOfTestPoint)));
+% TrainMAPE1=100/NumberOfTrainPoint*sum(abs(real(PSOgBest.Error(:,1)))./real(y(1).value(1:NumberOfTrainPoint)));
+% TestMAPE1=100/NumberOfTestPoint*sum(abs(real(testError(:,1)))./real(y(1).value(1:NumberOfTestPoint)));
+% TrainMAPE2=100/NumberOfTrainPoint*sum(abs(imag(PSOgBest.Error(:,1)))./(imag(y(1).value(1:NumberOfTrainPoint))));
+% TestMAPE2=100/NumberOfTestPoint*sum(abs(imag(testError(:,1)))./imag(y(1).value(1:NumberOfTestPoint)));
 
 % TrainMAPE3=100/NumberOfTrainPoint*sum(abs(real(PSOgBest.Error(:,2)))./real(y(2).value(1:NumberOfTrainPoint)));
 % TestMAPE3=100/NumberOfTestPoint*sum(abs(real(testError(:,2)))./real(y(2).value(1:NumberOfTestPoint)));

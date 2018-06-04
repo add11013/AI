@@ -19,7 +19,7 @@ for trial=1:10
     trial
     ExperimentationName='EX3';
     NumberOfTrainPoint=181;
-    ParameterOfPreSC=0.2;
+    ParameterOfPreSC=0.2;   
     MODEL_PSO(trial, ExperimentationName, NumberOfTrainPoint, ParameterOfPreSC);
 end
 

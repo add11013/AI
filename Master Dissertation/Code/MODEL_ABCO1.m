@@ -1,4 +1,4 @@
-function time=MODEL_ABCO(trial, ExperimentationName, NumberOfTrainPoint, ParameterOfPreSC)
+function time=MODEL_ABCO1(trial, ExperimentationName, NumberOfTrainPoint, ParameterOfPreSC)
 close all;
 tic
 
@@ -23,7 +23,7 @@ end
 %% prepare target
 NumberOfINPUT=length(h);
 %NumberOfOUTPUT is number of complex-value targets
-NumberOfOUTPUT=NumberOfTarget/2;
+NumberOfOUTPUT=NumberOfTarget;
 
 %k is the first column of target in DataMatrix
 k=30*NumberOfTarget+1;
@@ -183,7 +183,7 @@ end
 toc
 %% ABCO parameters
 ABCO.limit=20;
-ABCO.iterations=100;
+ABCO.iterations=10;
 ABCO.swarm_size=40;
 ABCO.OnlookerBee_size=10;
 ABCOgBest.rmse=1e99;
@@ -239,13 +239,13 @@ for ite=1:ABCO.iterations
                 theta1Ofh=gaussmf(h(M).value,termSet.INPUT(M).fuzzyset(FormationMatrix(rule,M)).value,3)*Lambda1Set.INPUT(M).fuzzyset(FormationMatrix(rule,M)); %dr/dx
                 temp=r.*exp(j.*(theta1Ofh));
                 membership1=membership1.*temp;
-                temp2=real(temp);
-                membership2=membership2.*temp2;
+%                 temp2=real(temp);
+%                 membership2=membership2.*temp2;
                 %                         temp3=r*cos(theta2Ofh)*sin(theta1Ofh)+r*sin(theta2Ofh)*j;
                 %                         membership3=membership3*temp3;
             end
             Beta(1).value(rule,:)=membership1;
-            Beta(2).value(rule,:)=membership2;
+%             Beta(2).value(rule,:)=membership2;
             %                     Beta(3).value(rule,jj)=membership3;
         end
         
@@ -387,13 +387,13 @@ for ite=1:ABCO.iterations
                     theta1Ofh=gaussmf(h(M).value,termSet.INPUT(M).fuzzyset(FormationMatrix(rule,M)).value,3)*Lambda1Set.INPUT(M).fuzzyset(FormationMatrix(rule,M)); %dr/dx
                     temp=r.*exp(j.*(theta1Ofh));
                     membership1=membership1.*temp;
-                    temp2=real(temp);
-                    membership2=membership2.*temp2;
+%                     temp2=real(temp);
+%                     membership2=membership2.*temp2;
                     %                         temp3=r*cos(theta2Ofh)*sin(theta1Ofh)+r*sin(theta2Ofh)*j;
                     %                         membership3=membership3*temp3;
                 end
                 Beta(1).value(rule,:)=membership1;
-                Beta(2).value(rule,:)=membership2;
+%                 Beta(2).value(rule,:)=membership2;
                 %                     Beta(3).value(rule,jj)=membership3;
             end
             
@@ -566,13 +566,13 @@ legend('Target (APPLE)','Forecast (APPLE)');
 xlabel('Trading date index');
 ylabel('Stock price (APPLE)');
 
-figure(2)
-output=OriginalData(31:length(OriginalData)-1,2)+imag(FinalyHead(:,1));
-plot(x,output);
-line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,2))*0.8 max(OriginalData(:,2))*1.3]);
-legend('Target (IBM)','Forecast (IBM)');
-xlabel('Trading date index');
-ylabel('Stock price (IBM)');
+% figure(2)
+% output=OriginalData(31:length(OriginalData)-1,2)+imag(FinalyHead(:,1));
+% plot(x,output);
+% line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,2))*0.8 max(OriginalData(:,2))*1.3]);
+% legend('Target (IBM)','Forecast (IBM)');
+% xlabel('Trading date index');
+% ylabel('Stock price (IBM)');
 
 % figure(3)
 % output=OriginalData(31:length(OriginalData)-1,3)+real(FinalyHead(:,2));

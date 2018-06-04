@@ -31,7 +31,7 @@ NumberOfOUTPUT=NumberOfTarget/2;
 %k is the first column of target in DataMatrix 
 k=30*NumberOfTarget+1;
 if NumberOfTarget==1
-    y(1).valu=DataMatrix(1:NumberOfTrainPoint,k);
+    y(1).value=DataMatrix(1:NumberOfTrainPoint,k);
 elseif mod(NumberOfTarget,2)==0
     for N=1:NumberOfOUTPUT
         realPartOfTrain=DataMatrix(1:NumberOfTrainPoint,k);
@@ -181,7 +181,7 @@ NumberOfPremise=length(FormationMatrix);
 NumberOfPremiseParameters=0;
 for M=1:NumberOfINPUT
     %乘以4是因為有center、std、lambda1、lambda2
-    NumberOfPremiseParameters=NumberOfPremiseParameters+length(h(M).center)*4;
+    NumberOfPremiseParameters=NumberOfPremiseParameters+length(h(M).center)*3;
 end
 toc
 %% PSO parameters
@@ -201,8 +201,7 @@ toc
             particle(i).Position(j1)=h(M).center(ii)^2*randn; %center
             particle(i).Position(j1+1)=h(M).std^2*randn; %std
             particle(i).Position(j1+2)=randn*10; %lambda1
-            particle(i).Position(j1+3)=randn*10; %lambda2
-            j1=j1+4;
+            j1=j1+3;
         end
     end
     particle(i).Velocity(1:NumberOfPremiseParameters)=0;
@@ -229,8 +228,7 @@ for ite=1:PSO.iterations
                 for number=1:length(h(M).center)
                     termSet.INPUT(M).fuzzyset(number).value=[particle(i).Position(j1) particle(i).Position(j1+1)];
                     Lambda1Set.INPUT(M).fuzzyset(number)=particle(i).Position(j1+2);
-                    Lambda2Set.INPUT(M).fuzzyset(number)=particle(i).Position(j1+3);
-                    j1=j1+4;
+                    j1=j1+3;
                 end
             end
 
@@ -312,7 +310,7 @@ for ite=1:PSO.iterations
             if(k==1)
                 particle(i).RLSE.P=P0-(P0*b(k).value)/(I+transpose(b(k).value)*P0*b(k).value)*transpose(b(k).value)*P0;
                 particle(i).RLSE.theta=theta0+particle(i).RLSE.P*b(k).value*(y(N).value(k)-transpose(b(k).value)*theta0);
-            else         
+            else
                 particle(i).RLSE.P=particle(i).RLSE.P-(particle(i).RLSE.P*b(k).value)/(I+transpose(b(k).value)*particle(i).RLSE.P*b(k).value)*transpose(b(k).value)*particle(i).RLSE.P;
                 particle(i).RLSE.theta=particle(i).RLSE.theta+particle(i).RLSE.P*b(k).value*(y(N).value(k)-transpose(b(k).value)*particle(i).RLSE.theta);
             end
@@ -447,10 +445,10 @@ end
 %         TestRMSE3=sqrt(sum(real(testError(:,2)).^2)/(NumberOfTestPoint));
 %         TestRMSE4=sqrt(sum(imag(testError(:,2)).^2)/(NumberOfTestPoint));
 
-TrainMAPE1=100/NumberOfTrainPoint*sum(abs(real(PSOgBest.Error(:,1)))./real(y(1).value(1:NumberOfTrainPoint)));
-TestMAPE1=100/NumberOfTestPoint*sum(abs(real(testError(:,1)))./real(y(1).value(1:NumberOfTestPoint)));
-TrainMAPE2=100/NumberOfTrainPoint*sum(abs(imag(PSOgBest.Error(:,1)))./(imag(y(1).value(1:NumberOfTrainPoint))));
-TestMAPE2=100/NumberOfTestPoint*sum(abs(imag(testError(:,1)))./imag(y(1).value(1:NumberOfTestPoint)));
+% TrainMAPE1=100/NumberOfTrainPoint*sum(abs(real(PSOgBest.Error(:,1)))./real(y(1).value(1:NumberOfTrainPoint)));
+% TestMAPE1=100/NumberOfTestPoint*sum(abs(real(testError(:,1)))./real(y(1).value(1:NumberOfTestPoint)));
+% TrainMAPE2=100/NumberOfTrainPoint*sum(abs(imag(PSOgBest.Error(:,1)))./(imag(y(1).value(1:NumberOfTrainPoint))));
+% TestMAPE2=100/NumberOfTestPoint*sum(abs(imag(testError(:,1)))./imag(y(1).value(1:NumberOfTestPoint)));
 
 % TrainMAPE3=100/NumberOfTrainPoint*sum(abs(real(PSOgBest.Error(:,2)))./real(y(2).value(1:NumberOfTrainPoint)));
 % TestMAPE3=100/NumberOfTestPoint*sum(abs(real(testError(:,2)))./real(y(2).value(1:NumberOfTestPoint)));

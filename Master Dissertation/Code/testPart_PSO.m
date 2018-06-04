@@ -36,8 +36,7 @@
                 for number=1:length(h(M).center)
                     termSet.INPUT(M).fuzzyset(number).value=[PSOgBest.Position(j1) PSOgBest.Position(j1+1)];
                     Lambda1Set.INPUT(M).fuzzyset(number)=PSOgBest.Position(j1+2);
-                    Lambda2Set.INPUT(M).fuzzyset(number)=PSOgBest.Position(j1+3);
-                    j1=j1+4;
+                    j1=j1+3;
                 end
             end
             
@@ -48,14 +47,12 @@
                 for rule=1:length(FormationMatrix)
                     testmembership1=1;
                     testmembership2=1;
-                    testmembership3=1;
                     for M=1:NumberOfINPUT
                         r=gaussmf(testh(M).value,termSet.INPUT(M).fuzzyset(FormationMatrix(rule,M)).value,1);
                         theata1Ofh=gaussmf(testh(M).value,termSet.INPUT(M).fuzzyset(FormationMatrix(rule,M)).value,3)*Lambda1Set.INPUT(M).fuzzyset(FormationMatrix(rule,M)); %dr/dx
-                        theata2Ofh=gaussmf(testh(M).value,termSet.INPUT(M).fuzzyset(FormationMatrix(rule,M)).value,6)*Lambda2Set.INPUT(M).fuzzyset(FormationMatrix(rule,M)); %d2r/dx^2
-                        temp=r.*exp(j.*(theata1Ofh+theata2Ofh));
+                        temp=r.*exp(j.*(theata1Ofh));
                         testmembership1=testmembership1.*temp;
-                        temp2=r.*cos(theata2Ofh).*cos(theata1Ofh)+r.*cos(theata2Ofh).*sin(theata1Ofh).*j;
+                        temp2=real(temp);
                         testmembership2=testmembership2.*temp2;
 %                         temp3=r*cos(theata2Ofh)*sin(theata1Ofh)+r*sin(theata2Ofh)*j;
 %                         membership3=membership3*temp3;
@@ -65,17 +62,26 @@
 %                     testBeta(3).value(rule,jj)=membership3;
                 end
 
+                
             %Normalization
             for N=1:NumberOfOUTPUT
                 testNBeta(N).value(1:length(FormationMatrix),1:NumberOfTestPoint)=0;
                 for jj=1:NumberOfTestPoint
                     for rule=1:length(FormationMatrix)
-                        temp1=real(testBeta(N).value(rule,jj))/sum(real(testBeta(N).value(:,jj)));
-                        temp2=imag(testBeta(N).value(rule,jj))/sum(imag(testBeta(N).value(:,jj)));
+                        SumReal=sum(real(testBeta(N).value(:,jj)));
+                        SumImag=sum(imag(testBeta(N).value(:,jj)));
+                        if SumReal==0
+                            SumReal=1e-99;
+                        end
+                        if SumImag==0
+                            SumImag=1e-99;
+                        end
+                        temp1=real(testBeta(N).value(rule,jj))/SumReal;
+                        temp2=imag(testBeta(N).value(rule,jj))/SumImag;
                         testNBeta(N).value(rule,jj)=temp1+temp2*j;
                     end
                 end
-            end
+           end
         
         
         for N=1:NumberOfOUTPUT
