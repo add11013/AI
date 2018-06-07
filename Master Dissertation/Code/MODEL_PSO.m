@@ -191,7 +191,7 @@ toc
   PSO.s1=rand(1);
   PSO.s2=rand(1);
   PSO.swarm_size=50;
-  PSO.iterations=100;
+  PSO.iterations=1;
   %initialize the particles
   for i=1:PSO.swarm_size
     j1=1;
