@@ -574,21 +574,21 @@ legend('Target (IBM)','Forecast (IBM)');
 xlabel('Trading date index');
 ylabel('Stock price (IBM)');
 
-% figure(3)
-% output=OriginalData(31:length(OriginalData)-1,3)+real(FinalyHead(:,2));
-% plot(x,output);
-% line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,3))*0.8 max(OriginalData(:,3))*1.3]);
-% legend('Target (S&P500)','Forecast (S&P500)');
-% xlabel('Trading date index');
-% ylabel('Stock price (S&P500)');
-% 
-% figure(4)
-% output=OriginalData(31:length(OriginalData)-1,4)+imag(FinalyHead(:,2));
-% plot(x,output);
-% line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,4))*0.8 max(OriginalData(:,4))*1.3]);
-% legend('Target (RUSSELL 2000)','Forecast (RUSSELL 2000)');
-% xlabel('Trading date index');
-% ylabel('Stock price (RUSSELL 2000)');
+figure(3)
+output=OriginalData(31:length(OriginalData)-1,3)+real(FinalyHead(:,2));
+plot(x,output);
+line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,3))*0.8 max(OriginalData(:,3))*1.3]);
+legend('Target (S&P500)','Forecast (S&P500)');
+xlabel('Trading date index');
+ylabel('Stock price (S&P500)');
+
+figure(4)
+output=OriginalData(31:length(OriginalData)-1,4)+imag(FinalyHead(:,2));
+plot(x,output);
+line([NumberOfTrainPoint NumberOfTrainPoint],[min(OriginalData(:,4))*0.8 max(OriginalData(:,4))*1.3]);
+legend('Target (RUSSELL 2000)','Forecast (RUSSELL 2000)');
+xlabel('Trading date index');
+ylabel('Stock price (RUSSELL 2000)');
 
 %         figure(5)
 %         output=OriginalData(31:283,5)+imag(FinalyHead(:,3));
