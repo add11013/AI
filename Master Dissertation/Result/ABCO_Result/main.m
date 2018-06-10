@@ -3,8 +3,8 @@ clc
  
 Target=1;
 NumberOfTrial=10;
-LoadName='PSOResult_EX3_trial';
-LoadName1='1PSOResult_Ex3_trial';
+LoadName='ABCOResult_EX3_trial';
+LoadName1='1ABCOResult_Ex3_trial';
 ProfitTable=PaperStrategy(LoadName,Target,NumberOfTrial);
 ProfitTable1=PaperStrategy(LoadName1,Target,NumberOfTrial);
 for i=1:300

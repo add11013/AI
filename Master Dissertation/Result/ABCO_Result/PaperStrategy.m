@@ -8,7 +8,7 @@ for iiii=1:NumberOfTrial
         Alpha=iii*0.001-0.001
         
         for N=1:NumberOfOUTPUT
-            FinalyHead(:,N)=[PSOgBest.yHead(:,N) ;testyHead(:,N)];
+            FinalyHead(:,N)=[ABCOgBest.yHead(:,N) ;testyHead(:,N)];
         end
         TMP=[];
         j1=1;
@@ -22,7 +22,7 @@ for iiii=1:NumberOfTrial
         
         
         
-        actual=OriginalData(33:length(OriginalData),:);
+        actual=OriginalData(33:length(OriginalData),Target);
         buy=0;
         sale=0;
         SaleMoney=0;
