@@ -3,9 +3,9 @@ clc
  
 Target=2;
 NumberOfTest=10;
-Alpha=0.5;
-LoadName='PSOResult_Ex2_trial';
-LoadName1='1PSOResult_Ex2_trial';
+Alpha=0.07;
+LoadName='PSOResult_Ex3_trial';
+LoadName1='1PSOResult_Ex3_trial';
 
 ProfitTable=[PaperStrategy(LoadName,Target,Alpha,NumberOfTest) PaperStrategy(LoadName1,Target,Alpha,NumberOfTest)];
 
