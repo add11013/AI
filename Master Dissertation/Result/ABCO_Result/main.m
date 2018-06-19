@@ -1,9 +1,9 @@
 clear
 clc
 
-NumberOfProfitTarget=1;
+NumberOfProfitTarget=4;
 NumberOfTrial=10;
-LoadName='ABCOResult_EX1_trial';
+LoadName='ABCOResult_EX3_trial';
 
 %% 100 iterations
 ProfitTable=0;
@@ -18,9 +18,9 @@ for Target=1:NumberOfProfitTarget
         for N=1:NumberOfOUTPUT
             TMP=OriginalData(31:length(OriginalData)-1,j1)+real(FinalyHead(:,N));
             PredictClose(:,j1)=TMP(1:NumberOfAllPoint-1);
-%             TMP=OriginalData(31:length(OriginalData)-1,j1+1)+imag(FinalyHead(:,N));
-%             PredictClose(:,j1+1)=TMP(1:NumberOfAllPoint-1);
-%             j1=j1+2;
+            TMP=OriginalData(31:length(OriginalData)-1,j1+1)+imag(FinalyHead(:,N));
+            PredictClose(:,j1+1)=TMP(1:NumberOfAllPoint-1);
+            j1=j1+2;
         end
         
         
@@ -52,9 +52,9 @@ for Trial=1:NumberOfTrial
         for N=1:NumberOfOUTPUT
             TMP=OriginalData(31:length(OriginalData)-1,j1)+real(FinalyHead(:,N));
             PredictClose(:,j1)=TMP(1:NumberOfAllPoint-1);
-%             TMP=OriginalData(31:length(OriginalData)-1,j1+1)+imag(FinalyHead(:,N));
-%             PredictClose(:,j1+1)=TMP(1:NumberOfAllPoint-1);
-%             j1=j1+2;
+            TMP=OriginalData(31:length(OriginalData)-1,j1+1)+imag(FinalyHead(:,N));
+            PredictClose(:,j1+1)=TMP(1:NumberOfAllPoint-1);
+            j1=j1+2;
         end
         
         

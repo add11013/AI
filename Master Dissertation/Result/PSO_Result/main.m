@@ -1,9 +1,9 @@
 clear
 clc
 
-NumberOfProfitTarget=4;
+NumberOfProfitTarget=2;
 NumberOfTrial=10;
-LoadName='PSOResult_EX3_trial';
+LoadName='PSOResult_EX2_trial';
 
 %% 100 iterations
 ProfitTable=0;
