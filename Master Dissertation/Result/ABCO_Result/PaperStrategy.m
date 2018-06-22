@@ -9,15 +9,15 @@ for iii=1:300
     SaleMoney=0;
     BuyMoney=0;
     for i=1:length(Forecast)-1
-        %sell
-        if abs(Forecast(i)-Actual(i))/Actual(i)<=Alpha && (Forecast(i+1)-Actual(i))>0
-            sell=sell+1;
-            SaleMoney=SaleMoney+Actual(i+1)-Actual(i);
-        end
         %buy
-        if abs(Forecast(i)-Actual(i))/Actual(i)<=Alpha && (Forecast(i+1)-Actual(i))<0
+        if abs(Forecast(i)-Actual(i))/Actual(i)<=Alpha && (Forecast(i+1)-Actual(i))>0
             buy=buy+1;
-            BuyMoney=BuyMoney+Actual(i)-Actual(i+1);
+            BuyMoney=BuyMoney+Actual(i+1)-Actual(i);
+        end
+        %sell
+        if abs(Forecast(i)-Actual(i))/Actual(i)<=Alpha && (Forecast(i+1)-Actual(i))<0
+            sell=sell+1;
+            SaleMoney=SaleMoney+Actual(i)-Actual(i+1);
         end
     end
     Profit(iii,1)=SaleMoney+BuyMoney;

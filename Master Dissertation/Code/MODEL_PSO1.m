@@ -190,8 +190,8 @@ toc
   PSO.c2=2;
   PSO.s1=rand(1);
   PSO.s2=rand(1);
-  PSO.swarm_size=50;
-  PSO.iterations=100;
+  PSO.swarm_size=10;
+  PSO.iterations=1;
   %initialize the particles
   for i=1:PSO.swarm_size
     j1=1;
@@ -399,7 +399,7 @@ end
         
         TrainRMSE1=sqrt(sum(real(PSOgBest.Error(:,1)).^2)/(NumberOfTrainPoint));
         TrainRMSE2=sqrt(sum(imag(PSOgBest.Error(:,1)).^2)/(NumberOfTrainPoint));
-        TestRMSE1=sqrt(sum(real(testError(:,1)).^2)/(NumberOfTestPoint));
+        TestRMSE1=sqrt(sum(real(testError(:,1)).^2)/(NumberOfTestPoint))
         TestRMSE2=sqrt(sum(imag(testError(:,1)).^2)/(NumberOfTestPoint));
        
 %         TrainRMSE3=sqrt(sum(real(PSOgBest.Error(:,2)).^2)/(NumberOfTrainPoint));
@@ -418,7 +418,7 @@ end
 % TestMAPE4=100/NumberOfTestPoint*sum(abs(imag(testError(:,2)))./imag(y(2).value(1:NumberOfTestPoint)));
          
     time=toc;
-    trial=['PSOResult_' ExperimentationName '_trial' int2str(trial)];
+    trial=['1PSOResult_' ExperimentationName '_trial' int2str(trial)];
     save(trial);
     
  end
