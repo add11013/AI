@@ -2,105 +2,145 @@ clear
 clc
 close all
 
-NumberOfProfitTarget=2;
 NumberOfTrial=10;
 LoadName='PSOResult_EX2_trial';
 
-%% 100 iterations
+%% calculate the profit and the operation of the training data
 ProfitTable=0;
 OperateTable=0;
-for Target=1:NumberOfProfitTarget
-    for Trial=1:NumberOfTrial
-        load([LoadName int2str(Trial)])
-        for N=1:NumberOfOUTPUT
-            FinalyHead(:,N)=[PSOgBest.yHead(:,N) ;testyHead(:,N)];
-        end
-        TMP=[];
-        j1=1;
-        if NumberOfProfitTarget==1
-            for N=1:NumberOfOUTPUT
-                TMP=OriginalData(31:length(OriginalData)-1,j1)+real(FinalyHead(:,N));
-                PredictClose(:,j1)=TMP(1:NumberOfAllPoint-1);
-            end
-        else
-            for N=1:NumberOfOUTPUT
-                TMP=OriginalData(31:length(OriginalData)-1,j1)+real(FinalyHead(:,N));
-                PredictClose(:,j1)=TMP(1:NumberOfAllPoint-1);
-                TMP=OriginalData(31:length(OriginalData)-1,j1+1)+imag(FinalyHead(:,N));
-                PredictClose(:,j1+1)=TMP(1:NumberOfAllPoint-1);
-                j1=j1+2;
-            end
-        end
-
-        
-        
-        
-        Actual=OriginalData(33:length(OriginalData),Target);        
-        Forecast=PredictClose(:,Target);
-        TestRMSE=PSOgBest.Distance;
-        [Profit,OperationTable]=PaperStrategy(Actual,Forecast,TestRMSE);
-        
-        Profit_tmp(:,Trial)=Profit;
-    end
-    ProfitTable=ProfitTable+Profit_tmp;
-    
-end
-save('ProfitTable','ProfitTable','OperationTable','NumberOfProfitTarget','NumberOfTrial','LoadName');
-clear
-load('ProfitTable','NumberOfProfitTarget','NumberOfTrial','LoadName');
-%% 1 iteration
-LoadName=['1' LoadName];
-one_iteration_ProfitTable=0;
-one_iteration_OperateTable=0;
-for Target=1:NumberOfProfitTarget
 for Trial=1:NumberOfTrial
         load([LoadName int2str(Trial)])
-        for N=1:NumberOfOUTPUT
-            FinalyHead(:,N)=[PSOgBest.yHead(:,N) ;testyHead(:,N)];
-        end
+        % every taget have to calculate the profit
+
         TMP=[];
         j1=1;
-        if NumberOfProfitTarget==1
+        % if number of target is one, get the first output real part
+        if NumberOfTarget==1
             for N=1:NumberOfOUTPUT
-                TMP=OriginalData(31:length(OriginalData)-1,j1)+real(FinalyHead(:,N));
-                PredictClose(:,j1)=TMP(1:NumberOfAllPoint-1);
+                RealValue=OriginalData(32:(31+NumberOfTrainPoint),j1);
+                ModelOutput=real(PSOgBest.yHead(:,N))+OriginalData(31:(31+NumberOfTrainPoint-1),j1);
             end
         else
             for N=1:NumberOfOUTPUT
-                TMP=OriginalData(31:length(OriginalData)-1,j1)+real(FinalyHead(:,N));
-                PredictClose(:,j1)=TMP(1:NumberOfAllPoint-1);
-                TMP=OriginalData(31:length(OriginalData)-1,j1+1)+imag(FinalyHead(:,N));
-                PredictClose(:,j1+1)=TMP(1:NumberOfAllPoint-1);
+                RealValue(:,j1)=OriginalData(32:(31+NumberOfTrainPoint),j1);
+                RealValue(:,j1+1)=OriginalData(32:(31+NumberOfTrainPoint),j1);
+                ModelOutput(:,j1)=real(PSOgBest.yHead(:,N))+OriginalData(31:(31+NumberOfTrainPoint-1),j1);
+                ModelOutput(:,j1+1)=imag(PSOgBest.yHead(:,N))+OriginalData(31:(31+NumberOfTrainPoint-1),j1);
                 j1=j1+2;
             end
         end
+    for Target=1:NumberOfTarget
+        Actual=RealValue(:,Target);
+        Forecast=ModelOutput(:,Target);
+        Interval=30;
+        Differential=OriginalData((32-Interval):NumberOfTrainPoint+31);
+        for i=1:length(Differential)-Interval
+            tmp=[];
+            for ii=1:Interval
+                tmp(ii)=Differential(i+Interval-ii+1)-Differential(i+Interval-ii);
+            end
+            IntervalMean(i)=sum(tmp)/Interval;
+            IntervalStd(i)=std(tmp);
+        end
         
-        
-        
-        Actual=OriginalData(33:length(OriginalData),Target);
-        Forecast=PredictClose(:,Target);
-        TestRMSE=PSOgBest.Distance;
-        [Profit,one_iteration_OperationTable]=PaperStrategy(Actual,Forecast,TestRMSE);
-        Profit_tmp(:,Trial)=Profit;
+        % In function CalculateProfit_1, the final input parameter decides
+        % whether find the best alpha, if 0 means yes
+        [TrainProfit(Target).t(Trial).value,TrainOperationTable(Target).t(Trial).value]=PaperStrategy(Actual,Forecast,IntervalMean,IntervalStd,0);
+    end
 end
-        one_iteration_ProfitTable=one_iteration_ProfitTable+Profit_tmp;
+
+
+%% caluculate the sum of the all targets profit
+for Trial=1:NumberOfTrial
+        TrainAllProfit(Trial).value=0;
+        for Target=1:NumberOfTarget
+            TrainAllProfit(Trial).value=TrainAllProfit(Trial).value+TrainProfit(Target).t(Trial).value;
+        end
 end
-save('one_iteration_ProfitTable','one_iteration_ProfitTable','one_iteration_OperationTable');
+save('TrainProfitTable','TrainAllProfit','TrainProfit','TrainOperationTable','NumberOfTrial','LoadName','NumberOfTrial','Interval');
 clear
+load('TrainProfitTable');
 
-%% mean
-load('ProfitTable')
-load('one_iteration_ProfitTable')
-for i=1:100
-        Mean(i,1)=mean(ProfitTable(i,:));
-        Std(i,1)=std(ProfitTable(i,:));
-        Mean(i,2)=mean(one_iteration_ProfitTable(i,:));
-        Std(i,2)=std(one_iteration_ProfitTable(i,:));
+%% calculate the mean of the all trials for training data
+for Trial=1:NumberOfTrial
+    for i=1:100
+        TrainAllProfitTable(i,Trial)=TrainAllProfit(Trial).value(i,1);
+    end
 end
-max(Mean(:,1))
-max(Mean(:,2))
-
+        for i=1:100
+            Mean(i,1)=mean(TrainAllProfitTable(i,:));
+        end
+%% find the best alpha        
+[Maximum MaxIndex]=max(Mean)
+BestAlpha=MaxIndex*0.001;
+%% plot the profits in different alpha
 x=linspace(1,100,100);
 hold on 
-plot(x,Mean(:,1))
-plot(x,Mean(:,2),'--')
+plot(x,Mean)
+
+%% use best alpha to calculate the profits of the test data
+ProfitTable=0;
+OperateTable=0;
+for Trial=1:NumberOfTrial
+        load([LoadName int2str(Trial)])
+        % every taget have to calculate the profit
+
+        TMP=[];
+        j1=1;
+        % if number of target is one, get the first output real part
+        if NumberOfTarget==1
+            for N=1:NumberOfOUTPUT
+                RealValue(:,j1)=real(OriginalData((32+NumberOfTrainPoint):(31+NumberOfAllPoint),N));
+                ModelOutput(:,j1)=real(testyHead(:,N))+OriginalData((31+NumberOfTrainPoint):(31+NumberOfAllPoint-1),j1);
+            end
+        else
+            for N=1:NumberOfOUTPUT
+                RealValue(:,j1)=OriginalData((32+NumberOfTrainPoint):(31+NumberOfAllPoint),j1);
+                RealValue(:,j1+1)=OriginalData((32+NumberOfTrainPoint):(31+NumberOfAllPoint),j1);
+                ModelOutput(:,j1)=real(testyHead(:,N))+OriginalData((31+NumberOfTrainPoint):(31+NumberOfAllPoint-1),j1);
+                ModelOutput(:,j1+1)=imag(testyHead(:,N))+OriginalData((31+NumberOfTrainPoint):(31+NumberOfAllPoint-1),j1);
+                j1=j1+2;
+            end
+        end
+    for Target=1:NumberOfTarget
+        Actual=RealValue(:,Target);
+        Forecast=ModelOutput(:,Target);
+        Differential=OriginalData((32+NumberOfTrainPoint-Interval):NumberOfAllPoint+31);
+        for i=1:length(Differential)-Interval
+            tmp=[];
+            for ii=1:Interval
+                tmp(ii)=Differential(i+Interval-ii+1)-Differential(i+Interval-ii);
+            end
+            IntervalMean(i)=sum(tmp)/Interval;
+            IntervalStd(i)=std(tmp);
+        end
+        % in function CalculateProfit_1, the final input parameter decides
+        % whether find the best alpha, if 0 means yes
+        [Profit(Target).t(Trial).value,OperationTable(Target).t(Trial).value]=PaperStrategy(Actual,Forecast,IntervalMean,IntervalStd,BestAlpha);
+    end
+end
+
+%% caluculate the sum of the all targets profit
+for Trial=1:NumberOfTrial
+        AllProfit(Trial).value=0;
+        for Target=1:NumberOfTarget
+            AllProfit(Trial).value=AllProfit(Trial).value+Profit(Target).t(Trial).value;
+            TargetProft(Target).value(:,Trial)=Profit(Target).t(Trial).value;
+        end
+end
+save('ProfitTable','AllProfit','Profit','OperationTable','NumberOfTrial','LoadName','NumberOfTrial','BestAlpha','TargetProft');
+clear
+load('ProfitTable');
+
+%% calculate the mean of the all trials for training data
+for Trial=1:NumberOfTrial
+    for i=1:100
+        AllProfitTable(i,Trial)=AllProfit(Trial).value(i,1);
+    end
+end
+        for i=1:100
+            Mean(i,1)=mean(AllProfitTable(i,:));
+            Std=std(AllProfitTable(i,:));
+        end
+%% find the best alpha        
+[Maximum MaxIndex]=max(Mean);

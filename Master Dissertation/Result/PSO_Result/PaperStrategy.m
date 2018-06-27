@@ -1,29 +1,36 @@
-function [Profit,operation]=PaperStrategy(Actual,Forecast,TestRMSE)
+function [Profit,operation]=PaperStrategy(Actual,Forecast,IntervalMean,IntervalStd,Alpha)
+%if Alpha ==0 means that we have to find the best alpha, so we change the
+%Alpha in every for loop
+        if Alpha==0
+            flag=true;
+        else
+            flag=false;
+        end
+
 output_ProfitTable=[];
 tempProfitTable=[];
 
-for iii=1:100
-    Alpha=iii*0.001-0.001;
-    Alpha1=Alpha-0.03;
+for i=1:100
+    if flag==true
+        Alpha=i*0.001;
+    end
     buy=0;
     sell=0;
     SaleMoney=0;
     BuyMoney=0;
-    for i=1:length(Forecast)-1
+    for t=1:length(Forecast)-1
         %buy
-        if abs(Forecast(i)-Actual(i))/Actual(i)<=Alpha && abs(Forecast(i)-Actual(i))/Actual(i)>Alpha1 && (Forecast(i+1)-Actual(i))>0
-            operation(i,iii)=1;
-            BuyMoney=BuyMoney+Actual(i+1)-Actual(i);
+        if abs(Forecast(t)-Actual(t))/Actual(t)<=Alpha && (Forecast(t+1)-Actual(t))>0
+            operation(t,i)=1;
+            BuyMoney=BuyMoney+Actual(t+1)-Actual(t);
         %sell
-        elseif abs(Forecast(i)-Actual(i))/Actual(i)<=Alpha && abs(Forecast(i)-Actual(i))/Actual(i)>Alpha1 && (Forecast(i+1)-Actual(i))<0
-            operation(i,iii)=-1;
-            SaleMoney=SaleMoney+Actual(i)-Actual(i+1);
+        elseif abs(Forecast(t)-Actual(t))/Actual(t)<=Alpha && (Forecast(t+1)-Actual(t))<0
+            operation(t,i)=-1;
+            SaleMoney=SaleMoney+Actual(t)-Actual(t+1);
         else
-            operation(i,iii)=0;
+            operation(t,i)=0;
         end
     end
-    Profit(iii,1)=SaleMoney+BuyMoney;
-%     SellAndBuy(iii,1)=sell;
-%     SellAndBuy(iii,2)=buy;
+    Profit(i,1)=SaleMoney+BuyMoney;
 end
 end
