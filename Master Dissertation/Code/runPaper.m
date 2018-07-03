@@ -1,5 +1,6 @@
 % This is for running paper experimentations
-for trial=1:10
+NumberOfTrial=10;
+for trial=1:NumberOfTrial
     trial
     ExperimentationName='EX1';
     NumberOfTrainPoint=181;
@@ -7,7 +8,7 @@ for trial=1:10
     MODEL_PSO1(trial, ExperimentationName, NumberOfTrainPoint, ParameterOfPreSC);
 end
 % 
-% for trial=1:10
+% for trial=1:NumberOfTrial
 %     trial
 %     ExperimentationName='EX2';
 %     NumberOfTrainPoint=204;
@@ -15,7 +16,7 @@ end
 %     MODEL_PSO(trial, ExperimentationName, NumberOfTrainPoint, ParameterOfPreSC);
 % end
 % 
-% for trial=1:10
+% for trial=1:NumberOfTrial
 %     trial
 %     ExperimentationName='EX3';
 %     NumberOfTrainPoint=181;
@@ -23,7 +24,7 @@ end
 %     MODEL_PSO(trial, ExperimentationName, NumberOfTrainPoint, ParameterOfPreSC);
 % end
 % 
-% for trial=1:10
+% for trial=1:NumberOfTrial
 %     trial
 %     ExperimentationName='EX4';
 %     NumberOfTrainPoint=800;
@@ -31,7 +32,7 @@ end
 %     MODEL_PSO(trial, ExperimentationName, NumberOfTrainPoint, ParameterOfPreSC);
 % end
 % 
-% for trial=1:10
+% for trial=1:NumberOfTrial
 %     trial
 %     ExperimentationName='EX5';
 %     NumberOfTrainPoint=400;
@@ -39,7 +40,7 @@ end
 %     MODEL_PSO(trial, ExperimentationName, NumberOfTrainPoint, ParameterOfPreSC);
 % end
 
-% for trial=1:10
+% for trial=1:NumberOfTrial
 %     trial
 %     ExperimentationName='EX6';
 %     NumberOfTrainPoint=115;
@@ -47,7 +48,7 @@ end
 %     MODEL_PSO(trial, ExperimentationName, NumberOfTrainPoint, ParameterOfPreSC);
 % end
 
-% for trial=1:10
+% for trial=1:NumberOfTrial
 %     trial
 %     ExperimentationName='EX3';
 %     NumberOfTrainPoint=181;

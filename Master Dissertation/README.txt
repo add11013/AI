@@ -1,10 +1,16 @@
 資料夾
 Code	=>資料夾放的是所有程式碼以及DATASET，Code的說明檔(readme_code.doc)在此資料夾中
-Reference =>是所有參考文獻的pdf，在Used 資料夾裡是真正使用的，其餘為參考
 Data    =>放所有模型使用的原始資料
+Figure  =>所有實驗的圖(誤差、學習曲線、模型輸出)
+Reference =>是所有參考文獻的pdf，在Used 資料夾裡是真正使用的，其餘為參考
 Result  =>模型的結果，依據不同模型存放，資料夾檔名與模型一致
 
 檔案
-Paper 3.doc=>論文
-PAPER 3.ppt=>演算法說明及結果
-Paper OUTLINE.ppt =>論文OUTLINE
+105423028_林奇鋒_碩論計畫書.doc =>碩論計畫書
+105423028_林奇鋒_碩論計畫書.pdf =>碩論計畫書
+105423028_林奇鋒_碩論計畫書投影片.ppt =>碩論計畫書報告投影片
+Neural Network figure.pptx =>類神經網路圖
+口試問題.doc =>口試被問到的問題和應答
+畢業論文格式.pdf =>中大畢業論文格式
+碩士論文.doc =>論文
+碩士論文.ppt =>報告PPT
