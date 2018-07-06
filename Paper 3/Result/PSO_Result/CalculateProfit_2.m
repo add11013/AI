@@ -6,13 +6,13 @@
     else
         flag=false;
     end
-    WindowInterval=30;
+    WindowInterval=5;
     Windows=length(Actual)/WindowInterval;
     for i=1:100
         t=1;
         HoldStock=0;
         if flag==true
-            Alpha=i*0.01;
+            Alpha=i*0.001;
         end
         Money=0;
 

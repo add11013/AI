@@ -6,7 +6,7 @@
     else
         flag=false;
     end
-    WindowInterval=30;
+    WindowInterval=5;
     Windows=length(Actual)/WindowInterval;
     for i=1:100
         t=1;
