@@ -45,7 +45,7 @@ for Trial=1:NumberOfTrial
         
         % In function CalculateProfit_1, the final input parameter decides
         % whether find the best alpha, if 0 means yes
-        [TrainProfit(Target).t(Trial).value,TrainOperationTable(Target).t(Trial).value]=CalculateProfit_2(Actual,Forecast,IntervalMean,IntervalStd,0);
+        [TrainProfit(Target).t(Trial).value,TrainOperationTable(Target).t(Trial).value]=PaperStrategy(Actual,Forecast,IntervalMean,IntervalStd,0);
     end
 end
 
@@ -119,7 +119,7 @@ for Trial=1:NumberOfTrial
         end
         % in function CalculateProfit_1, the final input parameter decides
         % whether find the best alpha, if 0 means yes
-        [Profit(Target).t(Trial).value,OperationTable(Target).t(Trial).value]=CalculateProfit_2(Actual,Forecast,IntervalMean,IntervalStd,0);
+        [Profit(Target).t(Trial).value,OperationTable(Target).t(Trial).value]=PaperStrategy(Actual,Forecast,IntervalMean,IntervalStd,0);
     end
 end
 

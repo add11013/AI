@@ -3,7 +3,7 @@ clc
 close all
 
 NumberOfTrial=10;
-LoadName='PSOResult_EX1_trial';
+LoadName='ABCOResult_EX2_trial';
 
 %% calculate the profit and the operation of the training data
 ProfitTable=0;
@@ -18,14 +18,14 @@ for Trial=1:NumberOfTrial
         if NumberOfTarget==1
             for N=1:NumberOfOUTPUT
                 RealValue=OriginalData(32:(31+NumberOfTrainPoint),j1);
-                ModelOutput=real(PSOgBest.yHead(:,N))+OriginalData(31:(31+NumberOfTrainPoint-1),j1);
+                ModelOutput=real(ABCOgBest.yHead(:,N))+OriginalData(31:(31+NumberOfTrainPoint-1),j1);
             end
         else
             for N=1:NumberOfOUTPUT
                 RealValue(:,j1)=OriginalData(32:(31+NumberOfTrainPoint),j1);
                 RealValue(:,j1+1)=OriginalData(32:(31+NumberOfTrainPoint),j1);
-                ModelOutput(:,j1)=real(PSOgBest.yHead(:,N))+OriginalData(31:(31+NumberOfTrainPoint-1),j1);
-                ModelOutput(:,j1+1)=imag(PSOgBest.yHead(:,N))+OriginalData(31:(31+NumberOfTrainPoint-1),j1);
+                ModelOutput(:,j1)=real(ABCOgBest.yHead(:,N))+OriginalData(31:(31+NumberOfTrainPoint-1),j1);
+                ModelOutput(:,j1+1)=imag(ABCOgBest.yHead(:,N))+OriginalData(31:(31+NumberOfTrainPoint-1),j1);
                 j1=j1+2;
             end
         end
@@ -45,7 +45,7 @@ for Trial=1:NumberOfTrial
         
         % In function CalculateProfit_1, the final input parameter decides
         % whether find the best alpha, if 0 means yes
-        [TrainProfit(Target).t(Trial).value,TrainOperationTable(Target).t(Trial).value]=CalculateProfit_2(Actual,Forecast,IntervalMean,IntervalStd,0);
+        [TrainProfit(Target).t(Trial).value,TrainOperationTable(Target).t(Trial).value]=PaperStrategy(Actual,Forecast,IntervalMean,IntervalStd,0);
     end
 end
 
@@ -119,7 +119,7 @@ for Trial=1:NumberOfTrial
         end
         % in function CalculateProfit_1, the final input parameter decides
         % whether find the best alpha, if 0 means yes
-        [Profit(Target).t(Trial).value,OperationTable(Target).t(Trial).value]=CalculateProfit_2(Actual,Forecast,IntervalMean,IntervalStd,0);
+        [Profit(Target).t(Trial).value,OperationTable(Target).t(Trial).value]=PaperStrategy(Actual,Forecast,IntervalMean,IntervalStd,0);
     end
 end
 
