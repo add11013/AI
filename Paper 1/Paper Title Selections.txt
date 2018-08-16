@@ -1,3 +1,0 @@
-Selection 1: Sphere Complex Neuro-fuzzy System for Time Series Forecasting
-Selection 2: Sphere Complex Neuro-fuzzy Self-learning Approach to Time Series Prediction
-Selection 3: Time Series Prediction using Sphere Complex Neuro-fuzzy System
